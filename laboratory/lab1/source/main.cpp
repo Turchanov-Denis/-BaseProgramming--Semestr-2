@@ -1,5 +1,9 @@
 #include <iostream>
+#include "inc/AnimatedText.h"
+int main()
+{
 
-int main() {
-    std::cout << "hello" << std::endl;
+    // std::string text = "awd";
+    AnimatedText thing{"awd", 10000};
+    thing.printAnimation();
 }
