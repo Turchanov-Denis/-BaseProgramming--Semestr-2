@@ -21,7 +21,8 @@ add_executable("${PROJECT_NAME}" main.cpp
                                 inc/AnimatedText.hpp
 		
 )
-											
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/inc/Roboto-Regular.ttf
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})											
 target_link_libraries("${PROJECT_NAME}" sfml-graphics-s-d
 						  sfml-window-s-d
 						  sfml-system-s-d

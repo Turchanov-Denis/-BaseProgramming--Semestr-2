@@ -1,22 +1,27 @@
-// #include <iostream>
-// #include "inc/AnimatedText.hpp"
-// int main()
-// {
-
-//     // std::string text = "awd";
-//     AnimatedText thing{"awd", 1000};
-//     thing.printAnimation();
-// }
+ #include <iostream>
 #include <SFML/Graphics.hpp>
-
+#include <AnimatedText.hpp>
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    
+    sf::RenderWindow window(sf::VideoMode(300, 300), "SFML works!");
+    sf::Text text;
+    sf::Font font;
+    if (!font.loadFromFile("Roboto-Regular.ttf")) {
+        std::cout << "font error";
+        return 0;
+    }
+    text.setFont(font);
+    std::string str = "awd";
+    text.setString(str);
+    text.setCharacterSize(24); // in pixels, not points!
+    // set the color
+    text.setFillColor(sf::Color::White);
 
     while (window.isOpen())
     {
+        str += "a";
+        text.setString(str);
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -25,7 +30,7 @@ int main()
         }
 
         window.clear();
-        window.draw(shape);
+        window.draw(text);
         window.display();
     }
 
