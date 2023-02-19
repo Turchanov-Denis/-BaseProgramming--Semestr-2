@@ -1,6 +1,7 @@
  #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <AnimatedText.hpp>
+#include <SFML/System/Sleep.hpp>
 int main()
 {
     
@@ -12,16 +13,19 @@ int main()
         return 0;
     }
     text.setFont(font);
-    std::string str = "awd";
-    text.setString(str);
     text.setCharacterSize(24); // in pixels, not points!
     // set the color
     text.setFillColor(sf::Color::White);
 
+     AnimatedText thing{"awddd", 1000};
+
     while (window.isOpen())
     {
-        str += "a";
-        text.setString(str);
+
+        text.setString(thing.printAnimation());
+        sf::sleep(sf::milliseconds(thing.getDuration()));
+
+
         sf::Event event;
         while (window.pollEvent(event))
         {
