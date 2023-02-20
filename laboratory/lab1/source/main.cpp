@@ -2,6 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <AnimatedText.hpp>
 #include <SFML/System/Sleep.hpp>
+
+void mySleep(int duration) {
+    sf::sleep(sf::milliseconds(duration));
+}
 int main()
 {
     
@@ -17,15 +21,18 @@ int main()
     // set the color
     text.setFillColor(sf::Color::White);
 
-     AnimatedText thing{"awddd", 1000};
+     AnimatedText thing{};
+     thing.setText("Hello");
+     thing.setDuration(1000);
+     thing.setSleepFunction(mySleep);
 
     while (window.isOpen())
     {
+        /*void (*pt2func)(int) = nullptr;
+        pt2func = &mysleep;*/
 
-        text.setString(thing.printAnimation());
-        sf::sleep(sf::milliseconds(thing.getDuration()));
-
-
+        text.setString(thing.printAnimation()); // argument: calback : sleep fun 
+     
         sf::Event event;
         while (window.pollEvent(event))
         {
