@@ -6,7 +6,6 @@ class String
 private:
     size_t m_size;
     char *m_str = nullptr;
-
 public:
     // metod
     void print();
@@ -14,7 +13,6 @@ public:
     int find(char* substr);
     char const *c_str();
     char& at(size_t n);
-
     // constructor
     String(char const* str);
     String(const String& other);
@@ -30,6 +28,6 @@ public:
             String& tmp);
         friend std::istream& operator>>(std::istream& stream,
             String& tmp);
-    String(int str, size_t size);
+    String(int str, size_t size) = delete;
     ~String();
 };

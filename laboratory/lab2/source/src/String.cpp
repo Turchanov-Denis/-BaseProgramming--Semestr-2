@@ -104,7 +104,6 @@ std::istream &operator>>(std::istream &stream,
     std::copy(tmp_str, tmp_str + strlen(tmp_str), tmp.m_str);
     return stream;
 }
-String::String(int str, size_t size){};
 String::~String()
 {
     std::cout << "Destructor" << std::endl;
