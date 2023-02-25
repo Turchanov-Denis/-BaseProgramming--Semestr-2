@@ -5,6 +5,7 @@ class Typewriter
 private:
     /* data */
     std::vector<std::string> v;
+    int *m_arr = nullptr;
     size_t split(const std::string &txt, std::vector<std::string> &strs, char ch)
     {
         size_t pos = txt.find(ch);
@@ -25,17 +26,49 @@ private:
 
         return strs.size();
     }
+    void setKey(int *arr)
+    {
+        int tmp[] = {2, 8, 5, 1, 3};
+        // for (size_t i=0; i < v.size(); i++)
+        // {
+        //     std::cin>> arr[i];
+        // }
+        for (size_t i=0; i < v.size(); i++)
+        {
+            arr[i] = tmp[i];
+        }
+    }
+    int fibo(int n)
+    {
+        if (n == 1 || n == 2)
+            return (n - 1);
+        return fibo(n - 1) + fibo(n - 2);
+    }
 
 public:
     Typewriter(const char *ptr)
     {
-        split(ptr, v, ' ');
-        std::cout<< v[0];
+        m_arr = new int[split(ptr, v, ' ')];
+        std::cout<< "words: " << v.size() << std::endl;
+        setKey(m_arr);
     };
-    ~Typewriter(){};
+    ~Typewriter()
+    {
+        delete[] m_arr;
+    };
+
+    void Encode()
+    {
+        std::string tmpstr = "";
+        for (size_t i=0; i < v.size(); i++)
+        {
+            std::cout << v[m_arr[i]];
+        }
+    }
 };
 
 int main()
 {
-    Typewriter tw("awd awd");
+    Typewriter tw("Hello, my name is Ivan.");
+    tw.Encode();
 }
