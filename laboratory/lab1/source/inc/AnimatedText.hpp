@@ -1,20 +1,20 @@
 #include <iostream>
-#include "windows.h"
+
+#include <typeinfo>  //for 'typeid' to work 
 class AnimatedText
 {
 
 private:
     int m_duration;
     std::string m_text;
-    std::string m_is_animated_text = "";
-    void (*m_sleep)(int);
+    std::string m_is_animated_text;
+    long long int m_time_src{0};
 
 public:
-    AnimatedText(std::string text="", unsigned int duration = 1000, void (*callback)(int) = nullptr)
+    AnimatedText(std::string text="", unsigned int duration = 1000)
     {
         m_text = text;
         m_duration = duration;
-        m_sleep = callback;
     }
     ~AnimatedText() {};
     /**
@@ -24,6 +24,7 @@ public:
      */
     void setText(const std::string& str) {
         m_text = str;
+        m_is_animated_text.resize(m_text.length());
     }
      /**
      * setDuration setup delay animation
@@ -38,20 +39,29 @@ public:
     *
     * @param callback: is special sleep function
     */
-    void setSleepFunction(void (*callback)(int)) {
-        m_sleep = callback;
-    }
-    std::string  printAnimation() 
+ 
+    std::string  printAnimation()
     {
-        if (m_sleep == nullptr) {
-            throw std::runtime_error{ " Sleep function not exist && setup it " };
+        
+        //std::cout << m_is_animated_text.size() << " " << m_text.length() << std::endl;
+        if (!m_time_src) {
+           
+            std::time_t result = std::time(nullptr);
+            std::asctime(std::localtime(&result));
+            m_time_src = result;
+
+            /* std::cout << std::asctime(std::localtime(&result))
+                 << result << " seconds since the Epoch\n" << typeid((long long int)result).name();*/
+
         }
-        if (m_is_animated_text.length() == m_text.length()) {
-            return m_is_animated_text;
-        }
-        changeTmpText(m_text[m_is_animated_text.length()]);
-        m_sleep((m_duration));
-        return m_is_animated_text;
+        std::time_t result = std::time(nullptr);
+        std::asctime(std::localtime(&result));
+        //std::cout << result - m_time_src;
+        //std::cout << m_text[(m_time_src - result) % m_text.length()];
+       // m_is_animated_text[(((result - m_time_src)/m_duration) % m_text.length())] = m_text[(((result - m_time_src) / m_duration) % m_text.length())];
+        //std::cout << "s1 " << m_is_animated_text << " s2 " << m_text << std::endl;
+        return m_text.substr(0, (((result - m_time_src) / m_duration) % (m_text.length())+1));
+        
     }
 private:
     void changeTmpText(char el) {

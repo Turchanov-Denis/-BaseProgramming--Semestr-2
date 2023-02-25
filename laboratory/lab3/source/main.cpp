@@ -5,7 +5,7 @@ class Complex
     private:
     
     public:
-}
+};
 
 
 

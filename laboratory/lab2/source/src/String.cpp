@@ -54,8 +54,8 @@ String String::operator+(const String &other)
     delete[] tmp.m_str;
     tmp.m_str = new char[(this->m_size + other.m_size + 1)];
     tmp.m_size = this->m_size + other.m_size + 1;
-    std::copy(this->m_str, tmp.m_str + this->m_size, tmp.m_str);
-    // tmp.print();
+    std::copy(this->m_str, this->m_str + this->m_size + 1, tmp.m_str);
+    //tmp.print();
     strcat(tmp.m_str, other.m_str);
     return tmp;
 }
@@ -64,7 +64,7 @@ void String::operator+=(const String &other)
     String tmp = *this;
     delete[] this->m_str;
     this->m_str = new char[(tmp.m_size + other.m_size + 1)];
-    this->m_size = this->m_size + other.m_size + 1;
+    this->m_size = this->m_size + other.m_size;
     std::copy(tmp.m_str, tmp.m_str + this->m_size, this->m_str);
     strcat(this->m_str, other.m_str);
 }
@@ -85,7 +85,7 @@ bool String::operator<(const String &other)
 bool String::operator==(const String &other)
 {
 
-    return (this->m_size) == (other.m_size);
+    return ((this->m_size) == (other.m_size));
 }
 std::ostream &operator<<(std::ostream &stream,
                          String &tmp)
