@@ -1,26 +1,21 @@
 #include <iostream>
 #include <cstring>
-//#include "../inc/String.hpp"
-class String
-{
-private:
-    size_t m_size;
-    char *m_str = nullptr;
+#include "../inc/String.hpp"
 
-public:
+
     // metod
-    void print()
+    void String::print()
     {
         for (size_t i = 0; i < m_size; i++)
         {
             std::cout << m_str[i];
         }
     }
-    size_t length()
+    size_t String::length()
     {
         return m_size;
     }
-    int find(char *substr)
+    int String::find(char *substr)
     {
         char *res = strstr(m_str, substr);
         if (res)
@@ -30,11 +25,11 @@ public:
         return -1;
     }
 
-    char const *c_str()
+    char const * String::c_str()
     {
         return m_str;
     }
-    char &at(size_t n)
+    char & String::at(size_t n)
     {
         if (n >= m_size)
             throw std::out_of_range("Invalid index");
@@ -42,20 +37,20 @@ public:
     }
 
     // constructor
-    String(char const *str) : m_size(strlen(str)), m_str(new char[m_size + 1])
+    String::String(char const *str) : m_size(strlen(str)), m_str(new char[m_size + 1])
     {
         std::copy(str, str + m_size, m_str);
         m_str[m_size] = 0;
     }
-    String(const String &other) : String(other.m_str) {}
+    String::String(const String &other) : String(other.m_str) {}
     // operators
-    String &operator=(String tmp)
+    String & String::operator=(String tmp)
     {
         std::swap(m_size, tmp.m_size);
         std::swap(m_str, tmp.m_str);
         return *this;
     }
-    String operator+(const String &other)
+    String String::operator+(const String &other)
     {
         String tmp = *this;
         delete[] tmp.m_str;
@@ -66,7 +61,7 @@ public:
         strcat(tmp.m_str, other.m_str);
         return tmp;
     }
-    void operator+=(const String &other)
+    void String::operator+=(const String &other)
     {
         String tmp = *this;
         delete[] this->m_str;
@@ -75,31 +70,32 @@ public:
         std::copy(tmp.m_str, tmp.m_str + this->m_size, this->m_str);
         strcat(this->m_str, other.m_str);
     }
-    char operator[](int index)
+    char String::operator[](int index)
     {
         return this->m_str[index];
     }
-    bool operator>(const String &other)
+    bool String::operator>(const String &other)
     {
 
         return (this->m_size) > (other.m_size);
     }
-    bool operator<(const String &other)
+    bool String::operator<(const String &other)
     {
 
         return (this->m_size) < (other.m_size);
     }
-    bool operator==(const String &other)
+    bool String::operator==(const String &other)
     {
 
         return (this->m_size) == (other.m_size);
     }
-    friend std::ostream &operator<<(std::ostream &stream,
+     std::ostream &operator<<(std::ostream &stream,
                                     String &tmp)
     {
         tmp.print();
+        return stream;
     }
-    friend std::istream &operator>>(std::istream &stream,
+     std::istream &operator>>(std::istream &stream,
                                     String &tmp)
     {
         char tmp_str[1000];
@@ -108,9 +104,10 @@ public:
         tmp.m_str = new char[strlen(tmp_str) + 1];
         tmp.m_size = strlen(tmp_str);
         std::copy(tmp_str, tmp_str + strlen(tmp_str), tmp.m_str);
+        return stream;
     }
-    String(int str, size_t size) = delete;
-    ~String()
+    String::String(int str, size_t size){} ;
+    String::~String()
     {
         std::cout << "Destructor" << std::endl;
         if (m_str)
@@ -118,4 +115,4 @@ public:
             delete[] m_str;
         }
     };
-};
+
