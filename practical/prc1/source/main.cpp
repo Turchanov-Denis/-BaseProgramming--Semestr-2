@@ -33,7 +33,7 @@ private:
         // {
         //     std::cin>> arr[i];
         // }
-        for (size_t i=0; i < v.size(); i++)
+        for (size_t i = 0; i < v.size(); i++)
         {
             arr[i] = tmp[i];
         }
@@ -44,12 +44,23 @@ private:
             return (n - 1);
         return fibo(n - 1) + fibo(n - 2);
     }
+    int fibo_index(int value)
+    {
+        for (int i = 3; i < 10; i++)
+        {
+            if (value == fibo(i))
+            {
+                return i - 3;
+            }
+        }
+        throw std::out_of_range("awd");
+    }
 
 public:
     Typewriter(const char *ptr)
     {
         m_arr = new int[split(ptr, v, ' ')];
-        std::cout<< "words: " << v.size() << std::endl;
+        std::cout << "words: " << v.size() << std::endl;
         setKey(m_arr);
     };
     ~Typewriter()
@@ -59,16 +70,30 @@ public:
 
     void Encode()
     {
-        std::string tmpstr = "";
-        for (size_t i=0; i < v.size(); i++)
+        for (size_t i = 0; i < v.size(); i++)
         {
-            std::cout << v[m_arr[i]];
+            std::cout << v[fibo_index(m_arr[i])] << std::endl;
+        }
+    }
+    void Decode()
+    {
+        for (size_t i = 0; i < v.size(); i++) // find pos fibo by self fibo
+        {
+            for (size_t j = 0; j < v.size(); j++)
+            {
+                if (fibo_index(m_arr[j]) == i)
+                {
+                    std::cout << v[j] << " ";
+                }
+            }
         }
     }
 };
 
 int main()
 {
-    Typewriter tw("Hello, my name is Ivan.");
-    tw.Encode();
+    // Typewriter tw("Hello, my name is Ivan.");
+    // tw.Encode();
+    Typewriter tw1("my Ivan. is Hello, name");
+    tw1.Decode();
 }
