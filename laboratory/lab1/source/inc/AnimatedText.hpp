@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include <typeinfo>  //for 'typeid' to work 
 class AnimatedText
 {
 
@@ -56,10 +55,6 @@ public:
         }
         std::time_t result = std::time(nullptr);
         std::asctime(std::localtime(&result));
-        //std::cout << result - m_time_src;
-        //std::cout << m_text[(m_time_src - result) % m_text.length()];
-       // m_is_animated_text[(((result - m_time_src)/m_duration) % m_text.length())] = m_text[(((result - m_time_src) / m_duration) % m_text.length())];
-        //std::cout << "s1 " << m_is_animated_text << " s2 " << m_text << std::endl;
         return m_text.substr(0, (((result - m_time_src) / m_duration) % (m_text.length())+1));
         
     }

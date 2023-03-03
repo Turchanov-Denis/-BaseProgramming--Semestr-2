@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+
 class Typewriter
 {
 private:
@@ -26,13 +27,9 @@ private:
 
         return strs.size();
     }
-    void setKey(int *arr)
+    void setKeyService(int *arr)
     {
-        int tmp[] = {2, 8, 5, 1, 3};
-        // for (size_t i=0; i < v.size(); i++)
-        // {
-        //     std::cin>> arr[i];
-        // }
+        int tmp[] = {2, 8, 5, 1, 3}; // example
         for (size_t i = 0; i < v.size(); i++)
         {
             arr[i] = tmp[i];
@@ -44,9 +41,9 @@ private:
             return (n - 1);
         return fibo(n - 1) + fibo(n - 2);
     }
-    int fibo_index(int value)
+    size_t fibo_index(int value)
     {
-        for (int i = 3; i < 10; i++)
+        for (size_t i = 3; i < 10; i++)
         {
             if (value == fibo(i))
             {
@@ -60,8 +57,7 @@ public:
     Typewriter(const char *ptr)
     {
         m_arr = new int[split(ptr, v, ' ')];
-        std::cout << "words: " << v.size() << std::endl;
-        setKey(m_arr);
+        setKeyService(m_arr);
     };
     ~Typewriter()
     {
@@ -72,11 +68,13 @@ public:
     {
         for (size_t i = 0; i < v.size(); i++)
         {
-            std::cout << v[fibo_index(m_arr[i])] << std::endl;
+            std::cout << v[fibo_index(m_arr[i])] << " ";
         }
+        std::cout << std::endl;
     }
     void Decode()
     {
+        // need to upd
         for (size_t i = 0; i < v.size(); i++) // find pos fibo by self fibo
         {
             for (size_t j = 0; j < v.size(); j++)
@@ -88,6 +86,24 @@ public:
             }
         }
     }
+    void setKey()
+    {
+        // add checker
+        std::cout << "Set key:" << std::endl;
+        for (size_t i = 0; i < v.size(); i++)
+        {
+            std::cin >> m_arr[i]; // better create tmp
+        }
+    }
+    void getKey()
+    {
+        std::cout << "Key: ";
+        for (size_t i = 0; i < v.size(); i++)
+        {
+            std::cout << m_arr[i];
+        }
+        std::cout << std::endl;
+    }
 };
 
 int main()
@@ -95,5 +111,6 @@ int main()
     // Typewriter tw("Hello, my name is Ivan.");
     // tw.Encode();
     Typewriter tw1("my Ivan. is Hello, name");
-    tw1.Decode();
+    tw1.Encode();
+    tw1.getKey();
 }
