@@ -3,9 +3,6 @@
 #include <AnimatedText.hpp>
 #include <SFML/System/Sleep.hpp>
 
-void mySleep(int duration) {
-    sf::sleep(sf::milliseconds(duration));
-}
 int main()
 {
     
@@ -23,7 +20,7 @@ int main()
 
      AnimatedText thing{};
      thing.setText("awdw");
-     thing.setDuration(2000);
+     thing.setDuration(1);
     while (window.isOpen())
     {
         text.setString(thing.printAnimation()); // argument: calback : sleep fun 

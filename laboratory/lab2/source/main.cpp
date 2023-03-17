@@ -14,5 +14,5 @@ int main()
     s3 += s1;
     std::cout << "operator += s3:" << s3 << std::endl;
     std::cout << "operator [] s3:" << s3[0] << std::endl;
-    std::cout << "s3:" << s3 << " s4: " << s4 << " operator >,<,== " << (s1 == s2) << std::endl;
+    std::cout << "s3: " << s3 << " s4: " << s4 << " operator >,<,== " << (s1 > s2) << std::endl;
 } 

@@ -22,8 +22,8 @@ public:
     }
     Complex &operator+=(const Complex &other)
     {
-        this->m_a += other.m_a;
-        this->m_b += other.m_b;
+        m_a += other.m_a;
+        m_b += other.m_b;
         return *this;
     }
     friend Complex operator+(Complex self, const Complex &other)
@@ -33,8 +33,8 @@ public:
     }
     Complex &operator*=(const Complex &other)
     {
-        this->m_a *= other.m_a;
-        this->m_b *= other.m_b;
+        m_a *= other.m_a * this->m_a - other.m_b * this->m_b;
+        m_b *= this->m_a * other.m_b + this->m_b * other.m_a;
         return *this;
     }
     friend Complex operator*(Complex self, const Complex &other)
@@ -42,13 +42,18 @@ public:
         self *= other;
         return self;
     }
-    ~Complex() {}
     Complex &operator++()
     {
         this->m_a += 1;
         return *this;
     }
-    Complex &operator--()
+    Complex operator++(int)
+    {
+        Complex old = *this; // copy old value
+        operator++();  // prefix increment
+        return old;    // return old value
+    }
+    Complex &operator--(int)
     {
         this->m_a -= 1;
         return *this;
@@ -63,11 +68,16 @@ public:
     {
         in >> f.m_a >> f.m_b;
     }
+    ~Complex() {}
 };
 
 int main()
 {
     Complex c1(1.0, 2.0), c2(2.0);
     Complex c3 = c1 + c2;
-    std::cout << c3;
+    std::cout << c3 << std::endl;
+    Complex c4 = c1 * c2;
+    std::cout << c4 << std::endl;
+    c4++;
+    std::cout << c4 << std::endl;
 }

@@ -70,6 +70,8 @@ void String::operator+=(const String &other)
 }
 char String::operator[](int index)
 {
+    if (index >= m_size)
+            throw std::out_of_range("Invalid index");
     return this->m_str[index];
 }
 bool String::operator>(const String &other)
@@ -112,3 +114,4 @@ String::~String()
         delete[] m_str;
     }
 };
+
