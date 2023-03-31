@@ -71,7 +71,7 @@ public:
         m_size++;
         if ((m_size % 8) != 0) {
             if (el) {
-                m_arr[m_capacity] |= 1 << ((m_size % 8) - 1 );
+                m_arr[m_capacity] |= 1 << ((m_size % 8) - 1);
             }
         } else {
             m_capacity++;
@@ -86,7 +86,7 @@ public:
         if ((m_size % 8) != 0) {
             if (el) {
 
-                m_arr[m_capacity] |= 1 << ((m_size % 8) - 1 );
+                m_arr[m_capacity] |= 1 << ((m_size % 8) - 1);
             }
         } else {
             m_capacity++;
@@ -102,23 +102,56 @@ public:
         unsigned int b[8]{0};
         fromByte(m_arr[m_capacity], b, m_size % 8, 1);
     }
-    bool at(size_t index){
-        return (m_arr[index/8]) & (1 << (index % 8));
+
+    bool at(size_t index) {
+        return (m_arr[index / 8]) & (1 << (index % 8));
     }
-    size_t size(){
+
+    size_t size() {
         return m_size;
+    }
+
+    void change(size_t index, bool el) {
+
+            unsigned int b[8]{0};
+            fromByte(m_arr[index / 8], b, m_size % 8);
+            b[index] = int(el);
+            m_arr[index / 8] = toByte(b);
+
+    }
+
+    void erase(size_t index) {
+        unsigned int b[8]{0};
+        fromByte(m_arr[index / 8], b, m_size % 8);
+        for (int i = index; i < 8; ++i)
+            b[i] = b[i + 1]; // copy next element left
+        m_arr[index / 8] = toByte(b);
+        m_size--;
+    }
+    void insert(size_t index, bool el){
+        m_size++;
+        if (index==0 || index % 7 != 0) {
+            unsigned int b[8]{0};
+            fromByte(m_arr[index / 8], b, m_size % 8);
+            int tmp = b[index];
+            b[index] = (int) el;
+            for (size_t i = index; i < 8; ++i){ // 1 1 0 1 --> 1 1 {1} 0 1
+                int tmpSub = b[i+1];
+                b[i+1] = tmp;
+                tmp = tmpSub;
+            }
+            m_arr[index / 8] = toByte(b);
+        }
     }
 };
 
 int main() {
     MyBoolVector<bool> a{1, 0, 1};
 //    MyBoolVector<bool> b{a};
-    a.push(false);
-    a.push(true);
-    a.push(1);
-    std::cout << a.at(0) << std::endl;
-    std::cout << a.at(1) << std::endl;
-    std::cout << a.at(2) << std::endl;
-//    a.print();
+//    a.push(false);
+//    std::cout << a.at(2) << std::endl;
+    a.insert(0, false);
+//    a.erase(1);
+    a.print();
 
 }
