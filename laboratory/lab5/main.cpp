@@ -63,19 +63,16 @@ public:
 
     ~MyBoolVector() {
         delete[] m_arr;
-        std::cout << "Bye" << std::endl;
+        std::cout << "-- Bye --" << std::endl;
     };
 
 //    methods
     void push(int el) {
         m_size++;
-        std::cout <<" a1 " <<m_arr[m_capacity] << std::endl;
         if ((m_size % 8) != 0) {
             if (el) {
-                m_arr[m_capacity] |= 1 << (m_size % 8);
-                std::cout<<" a2 " << m_arr[m_capacity] << std::endl;
+                m_arr[m_capacity] |= 1 << ((m_size % 8) - 1 );
             }
-            else {}
         } else {
             m_capacity++;
             m_arr[m_capacity] |= 1 << (m_size % 8);
@@ -86,12 +83,10 @@ public:
     void push(bool el) {
         el = (unsigned int) el;
         m_size++;
-//        std::cout <<" 1 w" <<m_arr[m_capacity] << std::endl;
         if ((m_size % 8) != 0) {
             if (el) {
 
                 m_arr[m_capacity] |= 1 << ((m_size % 8) - 1 );
-//                std::cout<<" w2 " << m_arr[m_capacity] << std::endl;
             }
         } else {
             m_capacity++;
@@ -107,6 +102,12 @@ public:
         unsigned int b[8]{0};
         fromByte(m_arr[m_capacity], b, m_size % 8, 1);
     }
+    bool at(size_t index){
+        return (m_arr[index/8]) & (1 << (index % 8));
+    }
+    size_t size(){
+        return m_size;
+    }
 };
 
 int main() {
@@ -114,7 +115,10 @@ int main() {
 //    MyBoolVector<bool> b{a};
     a.push(false);
     a.push(true);
-    a.push(false);
-    a.print();
+    a.push(1);
+    std::cout << a.at(0) << std::endl;
+    std::cout << a.at(1) << std::endl;
+    std::cout << a.at(2) << std::endl;
+//    a.print();
 
 }
