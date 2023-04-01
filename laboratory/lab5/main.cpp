@@ -40,7 +40,7 @@ public:
         unsigned int b[8]{0};
         int tmp_size{};
         for (int el: arr) {
-            if (tmp_size == 7) {
+            if (tmp_size == 8) {
                 m_arr[m_capacity] = toByte(b);
                 m_capacity++;
                 tmp_size = 0;
@@ -51,7 +51,7 @@ public:
         // add last to m_arr
         m_arr[m_capacity] = toByte(b);
 
-        fromByte(m_arr[m_capacity], b, m_size % 8);
+
     };
 
     MyBoolVector(MyBoolVector &other) {
@@ -95,12 +95,23 @@ public:
     }
 
     void print() {
-        for (size_t i = 1; i < m_capacity; i++) {
+        if (m_size <= 8) {
             unsigned int b[8]{0};
-            fromByte(m_arr[i], b, 8, 1);
+            fromByte(m_arr[m_capacity], b, m_size % 9, 1);
+        } else {
+
+            for (size_t i = 0; i <= m_capacity; i++) {
+
+
+                unsigned int b[8]{0};
+                fromByte(m_arr[i], b, 8, 1);
+                std::cout << "----" << std::endl;
+            }
+
+
         }
-        unsigned int b[8]{0};
-        fromByte(m_arr[m_capacity], b, m_size % 8, 1);
+
+
     }
 
     bool at(size_t index) {
@@ -113,10 +124,10 @@ public:
 
     void change(size_t index, bool el) {
 
-            unsigned int b[8]{0};
-            fromByte(m_arr[index / 8], b, m_size % 8);
-            b[index] = int(el);
-            m_arr[index / 8] = toByte(b);
+        unsigned int b[8]{0};
+        fromByte(m_arr[index / 8], b, 8);
+        b[index] = int(el);
+        m_arr[index / 8] = toByte(b);
 
     }
 
@@ -128,30 +139,66 @@ public:
         m_arr[index / 8] = toByte(b);
         m_size--;
     }
-    void insert(size_t index, bool el){
+
+    void insert(size_t index, bool el) {
         m_size++;
-        if (index==0 || index % 7 != 0) {
+        if (m_size < 8) {
             unsigned int b[8]{0};
-            fromByte(m_arr[index / 8], b, m_size % 8);
+            if (index < 8) {
+                fromByte(m_arr[0], b, 8);
+            } else {
+                fromByte(m_arr[index / 8], b, m_size % 8);
+            }
             int tmp = b[index];
             b[index] = (int) el;
-            for (size_t i = index; i < 8; ++i){ // 1 1 0 1 --> 1 1 {1} 0 1
-                int tmpSub = b[i+1];
-                b[i+1] = tmp;
+            for (size_t i = index; i < 8; i++) { // 1 1 0 1 --> 1 1 {1} 0 1
+                int tmpSub = b[i + 1];
+                b[i + 1] = tmp;
                 tmp = tmpSub;
             }
             m_arr[index / 8] = toByte(b);
+        } else {
+            // чекать сколько байт сдвигать, запоминать последние значения и побитово сдвигать
+            unsigned int b[8]{0};
+            fromByte(m_arr[index/8], b, 8);
+            int tmp = b[8]; // запомнить последний в переполненном
+            for (size_t i = index; i < 8; i++) { // 1 1 0 1 --> 1 1 {1} 0 1
+                int tmpSub = b[i + 1];
+                b[i + 1] = tmp;
+                tmp = tmpSub;
+            }
+            b[index] = (int) el;
+            m_arr[index / 8] = toByte(b);
+
+            for (size_t j = m_capacity - index/8; j <= m_capacity; j++) {
+                unsigned int b[8]{0};
+                fromByte(m_arr[j], b, 8);
+                int tmp1 = b[0];
+                for (size_t i =1; i< 8; i++){
+                    int sub=b[i];
+                    b[i+1]=tmp1;
+                    tmp1=sub;
+                }
+                b[0] = tmp;
+                m_arr[j]= toByte(b);
+            }
         }
     }
 };
 
 int main() {
-    MyBoolVector<bool> a{1, 0, 1};
+//    std::cout << 3/8 << std::endl;
+
+    MyBoolVector<bool> a{0, 1, 1, 1, 1, 1, 1, 1,   1, 0, 1, 0};
 //    MyBoolVector<bool> b{a};
 //    a.push(false);
 //    std::cout << a.at(2) << std::endl;
-    a.insert(0, false);
-//    a.erase(1);
+//    a.insert(0, false);
+    a.insert(10, false);
     a.print();
+//    std::cout << " ---- " << std::endl;
+//    a.change(0, true);
+//    a.print();
+//    a.erase(1);
 
 }
