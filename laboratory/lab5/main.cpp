@@ -142,47 +142,23 @@ public:
 
     void insert(size_t index, bool el) {
         m_size++;
-        if (m_size < 8) {
+
             unsigned int b[8]{0};
             if (index < 8) {
                 fromByte(m_arr[0], b, 8);
             } else {
-                fromByte(m_arr[index / 8], b, m_size % 8);
+                fromByte(m_arr[index / 8], b, index % 8);
             }
-            int tmp = b[index];
-            b[index] = (int) el;
+            int tmp = b[index%8];
+            b[index%8] = (int) el;
             for (size_t i = index; i < 8; i++) { // 1 1 0 1 --> 1 1 {1} 0 1
                 int tmpSub = b[i + 1];
                 b[i + 1] = tmp;
                 tmp = tmpSub;
             }
-            m_arr[index / 8] = toByte(b);
-        } else {
-            // чекать сколько байт сдвигать, запоминать последние значения и побитово сдвигать
-            unsigned int b[8]{0};
-            fromByte(m_arr[index/8], b, 8);
-            int tmp = b[8]; // запомнить последний в переполненном
-            for (size_t i = index; i < 8; i++) { // 1 1 0 1 --> 1 1 {1} 0 1
-                int tmpSub = b[i + 1];
-                b[i + 1] = tmp;
-                tmp = tmpSub;
-            }
-            b[index] = (int) el;
             m_arr[index / 8] = toByte(b);
 
-            for (size_t j = m_capacity - index/8; j <= m_capacity; j++) {
-                unsigned int b[8]{0};
-                fromByte(m_arr[j], b, 8);
-                int tmp1 = b[0];
-                for (size_t i =1; i< 8; i++){
-                    int sub=b[i];
-                    b[i+1]=tmp1;
-                    tmp1=sub;
-                }
-                b[0] = tmp;
-                m_arr[j]= toByte(b);
-            }
-        }
+
     }
 };
 
@@ -194,7 +170,8 @@ int main() {
 //    a.push(false);
 //    std::cout << a.at(2) << std::endl;
 //    a.insert(0, false);
-    a.insert(10, false);
+//    a.insert(1, false);
+    a.change(2, false);
     a.print();
 //    std::cout << " ---- " << std::endl;
 //    a.change(0, true);
