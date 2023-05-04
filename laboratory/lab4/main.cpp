@@ -178,8 +178,6 @@ public:
     Matrix &operator=(Matrix other)
     {
         std::swap(m_matrix, other.m_matrix);
-        std::swap(m_stroke, other.m_stroke);
-        std::swap(m_colomn, other.m_colomn);
         return *this;
     }
     Matrix &operator+=(const Matrix &tmp)

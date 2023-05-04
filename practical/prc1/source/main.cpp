@@ -111,6 +111,7 @@ int main()
     // Typewriter tw("Hello, my name is Ivan.");
     // tw.Encode();
     Typewriter tw1("my Ivan. is Hello, name");
+    tw1.setKey();
     tw1.Encode();
     tw1.getKey();
 }

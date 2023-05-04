@@ -99,65 +99,51 @@ public:
             unsigned int b[8]{0};
             fromByte(m_arr[m_capacity], b, m_size % 9, 1);
         } else {
-
             for (size_t i = 0; i <= m_capacity; i++) {
-
-
                 unsigned int b[8]{0};
                 fromByte(m_arr[i], b, 8, 1);
                 std::cout << "----" << std::endl;
             }
-
-
         }
-
-
     }
 
     bool at(size_t index) {
         return (m_arr[index / 8]) & (1 << (index % 8));
     }
-
     size_t size() {
         return m_size;
     }
-
     void change(size_t index, bool el) {
 
         unsigned int b[8]{0};
         fromByte(m_arr[index / 8], b, 8);
-        b[index] = int(el);
+        b[index%8] = int(el);
         m_arr[index / 8] = toByte(b);
 
     }
 
     void erase(size_t index) {
-        unsigned int b[8]{0};
-        fromByte(m_arr[index / 8], b, m_size % 8);
-        for (int i = index; i < 8; ++i)
-            b[i] = b[i + 1]; // copy next element left
-        m_arr[index / 8] = toByte(b);
+        if (m_size%8==0){
+            m_capacity--;
+        }
+        for (size_t i = index; i < m_size; i++) {
+            this->change(i, i+1);
+        }
         m_size--;
     }
-
     void insert(size_t index, bool el) {
+        if (m_size%8==0){
+            m_capacity++;
+        }
         m_size++;
-
-            unsigned int b[8]{0};
-            if (index < 8) {
-                fromByte(m_arr[0], b, 8);
-            } else {
-                fromByte(m_arr[index / 8], b, index % 8);
-            }
-            int tmp = b[index%8];
-            b[index%8] = (int) el;
-            for (size_t i = index; i < 8; i++) { // 1 1 0 1 --> 1 1 {1} 0 1
-                int tmpSub = b[i + 1];
-                b[i + 1] = tmp;
-                tmp = tmpSub;
-            }
-            m_arr[index / 8] = toByte(b);
-
+//        std::cout << "awd "<< this->at(index) << std::endl;
+        bool tmp = this->at(index);
+        this->change(index,el);
+        for (size_t i=index; i<m_size;i++){
+            bool subTmp = this->at(i+1);
+            this->change(i+1,tmp);
+            tmp = subTmp;
+        }
 
     }
 };
@@ -165,13 +151,15 @@ public:
 int main() {
 //    std::cout << 3/8 << std::endl;
 
-    MyBoolVector<bool> a{0, 1, 1, 1, 1, 1, 1, 1,   1, 0, 1, 0};
+    MyBoolVector<bool> a{1,0, 1, 1, 1, 1, 1,1};
 //    MyBoolVector<bool> b{a};
 //    a.push(false);
 //    std::cout << a.at(2) << std::endl;
+//    a.print();
 //    a.insert(0, false);
-//    a.insert(1, false);
-    a.change(2, false);
+//    a.erase(0);
+    a.insert(7, false);
+//    a.change(2, false);
     a.print();
 //    std::cout << " ---- " << std::endl;
 //    a.change(0, true);
