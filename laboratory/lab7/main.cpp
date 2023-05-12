@@ -24,7 +24,7 @@ static Vertex source_vertex;
 
 class Figure {
     // store
-public:
+protected:
     Color m_color;
     std::vector<Vertex> m_crd{};
 
@@ -47,21 +47,7 @@ public:
         std::sort(m_crd.begin(), m_crd.end(), sort_by_angle);
     }
 
-    double getSquare() {
 
-        double res{};
-        for (size_t i = 0; i < m_crd.size() - 1; i++) {
-            //std::cout << i<< " - i - " << i+1 << std::endl;
-            res += m_crd[i].x * m_crd[i + 1].y;
-        }
-        for (size_t j = m_crd.size() - 1; j >= 1; j--) {
-            //std::cout << j<< " - j - " << j-1 << std::endl;
-            res -= m_crd[j].x * m_crd[j - 1].y;
-        }
-        res += m_crd[m_crd.size() - 1].x * m_crd[0].y;
-        res -= m_crd[0].x * m_crd[m_crd.size() - 1].y;
-        return 0.5 * res;
-    }
 
     static bool sort_by_angle(Vertex arg1, Vertex arg2) {
         //std::cout << source_vertex.x << " - - - "<< source_vertex.y << std::endl;
@@ -81,6 +67,22 @@ public:
             return false;
         }
         return true;
+    }
+public:
+    virtual double getSquare() {
+
+        double res{};
+        for (size_t i = 0; i < m_crd.size() - 1; i++) {
+            //std::cout << i<< " - i - " << i+1 << std::endl;
+            res += m_crd[i].x * m_crd[i + 1].y;
+        }
+        for (size_t j = m_crd.size() - 1; j >= 1; j--) {
+            //std::cout << j<< " - j - " << j-1 << std::endl;
+            res -= m_crd[j].x * m_crd[j - 1].y;
+        }
+        res += m_crd[m_crd.size() - 1].x * m_crd[0].y;
+        res -= m_crd[0].x * m_crd[m_crd.size() - 1].y;
+        return 0.5 * res;
     }
 
     void print() {
@@ -111,6 +113,21 @@ public:
             throw std::exception();
         }
     };
+};
+
+class Cycle : public Figure {
+    // contained self methods
+    size_t limit = 1;
+    double m_radius;
+public:
+    Cycle(std::initializer_list<double> list, double radius) : Figure(list), m_radius(radius){
+        if (m_crd.size() != limit) {
+            throw std::exception();
+        }
+    };
+    double getSquare() override{
+        return atan(1)*4*2*m_radius;
+    }
 };
 
 int main() {
