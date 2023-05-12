@@ -20,14 +20,26 @@ class KinematicSolver {
     Vertex M1;
     Vertex M2;
 public:
-    KinematicSolver(double tL1, double tL2, double tx, double ty) : L1(tL1), L2(tL2), M2(tx, ty) {};
+    KinematicSolver(double tL1, double tL2, double tx, double ty) : L1(tL1), L2(tL2), M2(tx, ty) {
+        try{
+            if ((L1+L2)<(pow(M2.x * M2.x + M2.y * M2.y, 0.5))){
+                throw std::exception();
+            }
+        }
+        catch(const std::exception& err) {
+            std::cout << "Incorrect value" << std::endl;
+        }
+    };
 
     std::vector<double> getAngle() {
         double angleA;
         double angleB;
+        double angleC;
         angleA = 1 / cos(((M2.x * M2.x + M2.y * M2.y) + L2 - L1) / (2 * L2 * pow(M2.x * M2.x + M2.y * M2.y, 0.5)));
         angleB = 1 / cos((-(M2.x * M2.x + M2.y * M2.y) + L2 + L1) / (2 * L2 * L1));
-        return std::vector<double>{angleA, angleB};
+        // 90 triangle
+        angleC = acos(pow(M2.y * M2.y, 0.5)/pow(M2.x * M2.x + M2.y * M2.y, 0.5));
+        return std::vector<double>{angleA, angleB, angleC};
     }
 
 
@@ -35,8 +47,11 @@ public:
 
 int main() {
     const double PI = 3.14159265358979323846;
-    KinematicSolver a(10.0,20.0,25.0,25.0);
-    std::cout << a.getAngle()[0]* 180.f / PI <<" - "<< 180 - abs(a.getAngle()[1]*180.f / PI) << std::endl;
+    KinematicSolver a(10.0,20.0,20.0,20.0);
+    double xDegrees = (180 - a.getAngle()[0]* 180.f / PI - (180 - abs(a.getAngle()[1]*180.f / PI))) + a.getAngle()[2]* 180.f / PI;
+    std::cout << xDegrees <<" - "<< 180 - abs(a.getAngle()[1]*180.f / PI) << std::endl;
+    std::cout << sin(xDegrees*3.14159/180) <<" "<< 10.0*sin(xDegrees*3.14159/180)<< std::endl;
+    std::cout << cos(xDegrees*3.14159/180) <<" "<< 10.0*cos(xDegrees*3.14159/180) << std::endl;
 //        sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 //        window.setFramerateLimit(60);
 //
