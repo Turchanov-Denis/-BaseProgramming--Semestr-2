@@ -48,7 +48,6 @@ protected:
     }
 
 
-
     static bool sort_by_angle(Vertex arg1, Vertex arg2) {
         //std::cout << source_vertex.x << " - - - "<< source_vertex.y << std::endl;
         Vertex
@@ -68,6 +67,7 @@ protected:
         }
         return true;
     }
+
 public:
     virtual double getSquare() {
 
@@ -97,7 +97,7 @@ class Triangle : public Figure {
     // contained self methods
     size_t limit = 3;
 public:
-    Triangle(std::initializer_list<double> list) : Figure(list) {
+    Triangle(std::initializer_list<double> list, Color color) : Figure(list, color) {
         if (m_crd.size() != limit) {
             throw std::exception();
         }
@@ -108,7 +108,7 @@ class Rectangle : public Figure {
     // contained self methods
     size_t limit = 4;
 public:
-    Rectangle(std::initializer_list<double> list) : Figure(list) {
+    Rectangle(std::initializer_list<double> list, Color color) : Figure(list, color) {
         if (m_crd.size() != limit) {
             throw std::exception();
         }
@@ -120,18 +120,44 @@ class Cycle : public Figure {
     size_t limit = 1;
     double m_radius;
 public:
-    Cycle(std::initializer_list<double> list, double radius) : Figure(list), m_radius(radius){
+    Cycle(std::initializer_list<double> list, double radius) : Figure(list), m_radius(radius) {
         if (m_crd.size() != limit) {
             throw std::exception();
         }
     };
-    double getSquare() override{
-        return atan(1)*4*2*m_radius;
+
+    double getSquare() override {
+        return atan(1) * 4 * 2 * m_radius;
     }
 };
 
+enum class FigureType {
+    TRIANGLE,
+    RECTANGLE,
+    CYCLE
+};
+
+Figure *factory(FigureType type,std::initializer_list<double> listCord,Color color = Color::White) {
+    Figure* figure = nullptr;
+    switch (type) {
+        case FigureType::TRIANGLE:
+            figure = new Triangle(listCord, color);
+            break;
+        case FigureType::RECTANGLE:
+            figure = new Rectangle(listCord, color);
+            break;
+        case FigureType::CYCLE:
+            double radius;
+            std::cin>> radius;
+            figure = new Cycle(listCord,radius);
+            break;
+    }
+    return figure;
+}
+
 int main() {
-    Triangle a({3.97, 0.82, 2.26, 3.69, 5.39, 2.16});
-    std::cout << a.getSquare() << std::endl;
+    Figure* a = factory(FigureType::TRIANGLE,{3.97, 0.82, 2.26, 3.69, 5.39, 2.16});
+    std::cout << a->getSquare() << std::endl;
+    delete a;
     return 0;
 }

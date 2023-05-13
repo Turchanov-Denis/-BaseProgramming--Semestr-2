@@ -6,12 +6,12 @@
 
 class Device {
 public:
-    Device(const std::string &name) : name(name) {}
+    Device(const std::string &name) : m_name(name) {}
 
     virtual void poll() const = 0;
 
 protected:
-    std::string name;
+    std::string m_name;
 };
 
 class EnergyMeter : public Device {
@@ -19,7 +19,7 @@ public:
     EnergyMeter(const std::string &name) : Device(name) {}
 
     void poll() const override {
-        std::cout << "Polling energy meter: " << name << std::endl;
+        std::cout << "Polling energy meter: " << m_name << std::endl;
     }
 };
 
@@ -28,7 +28,7 @@ public:
     InputBlock(const std::string &name) : Device(name) {}
 
     void poll() const override {
-        std::cout << "Polling input block: " << name << std::endl;
+        std::cout << "Polling input block: " << m_name << std::endl;
     }
 };
 
@@ -37,7 +37,7 @@ public:
     HeatingControlBlock(const std::string &name) : Device(name) {}
 
     void poll() const override {
-        std::cout << "Polling heating control block: " << name << std::endl;
+        std::cout << "Polling heating control block: " << m_name << std::endl;
     }
 };
 
@@ -57,10 +57,11 @@ private:
     std::vector<Device *> devices;
 };
 
-void readConfigurationFromFile(const std::string &filename, SmartHome &smartHome) {
+void readConfiguration(const std::string &filename, SmartHome &smartHome) {
     std::ifstream file(filename);
     if (file.is_open()) {
         std::string line;
+
         while (std::getline(file, line)) {
             if (!line.empty()) {
                 if (line == "Меркурий 230") {
@@ -93,7 +94,7 @@ void readConfigurationFromFile(const std::string &filename, SmartHome &smartHome
 int main() {
     SmartHome smartHome;
     SetConsoleOutputCP(CP_UTF8);
-    readConfigurationFromFile("config.txt", smartHome);
+    readConfiguration("config.txt", smartHome);
     smartHome.pollAllDevices();
     return 0;
 }
