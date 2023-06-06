@@ -48,7 +48,7 @@ public:
             b[tmp_size] = el;
             tmp_size++;
         }
-        // add last to m_arr
+        // university last to m_arr
         m_arr[m_capacity] = toByte(b);
 
 
