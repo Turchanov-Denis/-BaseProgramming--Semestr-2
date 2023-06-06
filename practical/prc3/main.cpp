@@ -25,9 +25,16 @@ public:
             if ((L1+L2)<(pow(M2.x * M2.x + M2.y * M2.y, 0.5))){
                 throw std::exception();
             }
+            if ((pow(M2.x * M2.x + M2.y * M2.y, 0.5)+L2)<(L1)){
+                throw std::exception();
+            }
+            if ((L1+pow(M2.x * M2.x + M2.y * M2.y, 0.5))<(L2)){
+                throw std::exception();
+            }
         }
         catch(const std::exception& err) {
             std::cout << "Incorrect value" << std::endl;
+            exit(0);
         }
     };
 
@@ -50,7 +57,7 @@ public:
         double adjSide = 10.0*cos(alpha*3.14159/180);
         std::cout << "alpha "<< alpha << std::endl;
         std::cout << "beta "<< beta << std::endl;
-        std::cout << "coord L1 "<< oppSide << adjSide << std::endl;
+        std::cout << "coord L1 "<< oppSide<< " " << adjSide << std::endl;
         return Vertex(oppSide,adjSide);
     }
 
@@ -60,7 +67,7 @@ public:
 };
 
 int main() {
-    KinematicSolver a(10.0,20.0,20.0,20.0);
+    KinematicSolver a(11.0,20.0,20.0,20.0);
     Vertex res = a.getL1EndCor();
         sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
         window.setFramerateLimit(60);
